@@ -15,14 +15,6 @@ public class BookSoft2 {
     private final String pasword="sK8!qL6%";//internet
     
  
-    public void esperar (int time) {
-    try {
-    Thread.sleep (time);
-    } catch (Exception e) {
-    System.out.println("Fallo de espera");
-    }
-    }
-    
     public void menu1()
     {
         System.out.println("REGISTRO BIBLIOTECA MUNICIPAL");
@@ -94,17 +86,16 @@ public class BookSoft2 {
     {
 
         System.out.println("Digite el Codigo: ");
-        String codigo=teclado.nextLine();
-        
+        String codigo=teclado.next();
         
         System.out.println("Digite el Nombre: ");
-        String nombre=teclado.nextLine();
+        String nombre=teclado.next();
         
         System.out.println("Digite el Autor: ");
-        String autor=teclado.nextLine();
+        String autor=teclado.next();
         
         System.out.println("Digite el Area: ");
-        String area=teclado.nextLine();
+        String area=teclado.next();
         
         System.out.println("Digite el Año: ");
         int publicacion=teclado.nextInt();
@@ -120,7 +111,7 @@ public class BookSoft2 {
     public int buscar(Statement estado) throws SQLException
     {
             System.out.println("Digite el nombre: ");
-            String nombre=teclado.nextLine();  
+            String nombre=teclado.next();  
            
             ResultSet resultado=estado.executeQuery("SELECT * FROM `registro` WHERE `nombre` LIKE '"+nombre+"'");
             int m=0;
@@ -147,7 +138,7 @@ public class BookSoft2 {
         
     }
     
-    public void buscar(String name, Statement estado) throws SQLException
+    public int buscar(String name, Statement estado) throws SQLException
     {
             
             String nombre=name;
@@ -166,35 +157,47 @@ public class BookSoft2 {
                         "Cantidad: " +resultado.getInt("cantidad")+"\n"
                         +"---------------------------------------");
                 m=1;
+                return 1;
                 
             } 
             if(m==0)
             {
                 System.out.println("\n"+"Libro NO encontrado: ");
+                return 0;
                 
             }
-    
+        return 0;
     }
     
     public void actualizar(Statement estado) throws SQLException
     {
         
-        int a=buscar(estado);
-        if (a==1)//Permite actualizacion
+        System.out.println("Digite el nombre: ");        
+        String nombre=teclado.next();
+        int a=buscar(nombre,estado);
+        
+        if(a==1)
         {
+        estado.executeUpdate("DELETE FROM `registro` WHERE `nombre` LIKE '"+nombre+"'");
+        
         System.out.println("Ingrese la nueva Informacion:");
         ingresar(estado);
         System.out.println("Libro ACTUALIZADO con exito");
         }
+        
     }
     
     public void eliminar(Statement estado) throws SQLException
     {
+        
         System.out.println("Digite el nombre: ");        
-        String nombre=teclado.nextLine();
-        buscar(nombre,estado);
+        String nombre=teclado.next();
+        int a=buscar(nombre,estado);
+        if(a==1)
+        {
         estado.executeUpdate("DELETE FROM `registro` WHERE `nombre` LIKE '"+nombre+"'");
         System.out.println("Libro ELIMINADO con exito");
+        }
     }
           
     public static void main(String[] args) throws SQLException {
