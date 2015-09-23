@@ -14,6 +14,15 @@ public class BookSoft2 {
     private final String user= "sql289524";//internet
     private final String pasword="sK8!qL6%";//internet
     
+ 
+    public void esperar (int time) {
+    try {
+    Thread.sleep (time);
+    } catch (Exception e) {
+    System.out.println("Fallo de espera");
+    }
+    }
+    
     public void menu1()
     {
         System.out.println("REGISTRO BIBLIOTECA MUNICIPAL");
@@ -83,9 +92,10 @@ public class BookSoft2 {
             
     public void ingresar(Statement estado) throws SQLException
     {
-     
+
         System.out.println("Digite el Codigo: ");
         String codigo=teclado.nextLine();
+        
         
         System.out.println("Digite el Nombre: ");
         String nombre=teclado.nextLine();
@@ -96,7 +106,7 @@ public class BookSoft2 {
         System.out.println("Digite el Area: ");
         String area=teclado.nextLine();
         
-        System.out.println("Digite el Añor: ");
+        System.out.println("Digite el Año: ");
         int publicacion=teclado.nextInt();
         
         System.out.println("Digite el Cantidad: ");
@@ -104,6 +114,7 @@ public class BookSoft2 {
         
         estado.executeUpdate("INSERT INTO `registro` VALUES (NULL, '"+codigo+"','"+nombre+"','"+autor+"','"+area+"','"+publicacion+"','"+cantidad+"')");
         System.out.println("Libro INGRESADO con exito");
+   
     }
     
     public int buscar(Statement estado) throws SQLException
