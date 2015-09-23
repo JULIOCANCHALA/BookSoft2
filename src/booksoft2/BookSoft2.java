@@ -2,8 +2,6 @@ package booksoft2;
 
 import java.sql.*;//importo todo
 import java.util.Scanner;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *
@@ -13,8 +11,8 @@ import java.util.logging.Logger;
 public class BookSoft2 {
     
     private Scanner teclado=new Scanner(System.in);
-    private String user= "sql289524";//internet
-    private String pasword="sK8!qL6%";//internet
+    private final String user= "sql289524";//internet
+    private final String pasword="sK8!qL6%";//internet
     
     public void menu1()
     {
@@ -75,7 +73,7 @@ public class BookSoft2 {
             System.out.println("Error de mysql");
             return null;
         }
-         catch (Exception e) {//cualquier otro error
+         catch (ClassNotFoundException e) {//cualquier otro error
             System.out.println("Se ha encontrado un error: "+ e.getMessage());
             return null;
         }
@@ -193,10 +191,8 @@ public class BookSoft2 {
         BookSoft2 nuevo;
         nuevo=new BookSoft2();
         Scanner teclado=new Scanner(System.in);
-        
         Statement estado=nuevo.conectar();
-        
-               
+                      
         int opg=0;
         while(opg==0)
         {
