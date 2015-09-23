@@ -13,6 +13,8 @@ import java.util.logging.Logger;
 public class BookSoft2 {
     
     private Scanner teclado=new Scanner(System.in);
+    private String user= "sql289524";//internet
+    private String pasword="sK8!qL6%";//internet
     
     public void menu1()
     {
@@ -52,23 +54,149 @@ public class BookSoft2 {
         for ( int i=0;i<=2;i++) 
         System.out.println(" "); 
     }
-       
-    public static void main(String[] args) {
-        
-    String user= "sql289524";//internet
-    String pasword="sK8!qL6%";//internet
     
-    try {    
+    public Statement conectar()
+    {  
+    
+        try {    
             System.out.println("Intentando conectar a la base de datos..");
             Class.forName("com.mysql.jdbc.Driver");       
             
             Connection con=DriverManager.getConnection("jdbc:mysql://sql2.freemysqlhosting.net/sql289524",user,pasword);//para internet      
             System.out.println("Conexion exitosa...");     
+            
+            Statement estado=con.createStatement(); 
+            
+            return estado;
+            
+             } //Cierre try
+        
+        catch (SQLException ex) {//error en la sintaxis de mysql
+            System.out.println("Error de mysql");
+            return null;
+        }
+         catch (Exception e) {//cualquier otro error
+            System.out.println("Se ha encontrado un error: "+ e.getMessage());
+            return null;
+        }
+        
+        
+    }
+            
+    public void ingresar(Statement estado) throws SQLException
+    {
+     
+        System.out.println("Digite el Codigo: ");
+        String codigo=teclado.nextLine();
+        
+        System.out.println("Digite el Nombre: ");
+        String nombre=teclado.nextLine();
+        
+        System.out.println("Digite el Autor: ");
+        String autor=teclado.nextLine();
+        
+        System.out.println("Digite el Area: ");
+        String area=teclado.nextLine();
+        
+        System.out.println("Digite el Añor: ");
+        int publicacion=teclado.nextInt();
+        
+        System.out.println("Digite el Cantidad: ");
+        int cantidad=teclado.nextInt();   
+        
+        estado.executeUpdate("INSERT INTO `registro` VALUES (NULL, '"+codigo+"','"+nombre+"','"+autor+"','"+area+"','"+publicacion+"','"+cantidad+"')");
+        System.out.println("Libro INGRESADO con exito");
+    }
     
+    public int buscar(Statement estado) throws SQLException
+    {
+            System.out.println("Digite el nombre: ");
+            String nombre=teclado.nextLine();  
+           
+            ResultSet resultado=estado.executeQuery("SELECT * FROM `registro` WHERE `nombre` LIKE '"+nombre+"'");
+            int m=0;
+            while (resultado.next())
+            {
+                System.out.println("\n"+"Libro encontrado: ");
+                System.out.println("---------------------------------------"+"\n"+
+                        "Codigo: "+resultado.getString("codigo")+"\n"+
+                        "Nombre: "+resultado.getString("nombre")+"\n"+
+                        "Autor: "+resultado.getString("autor")+"\n"+
+                        "Area: "+resultado.getString("area")+"\n"+
+                        "Año: "+resultado.getInt("publicacion")+"\n"+
+                        "Cantidad: " +resultado.getInt("cantidad")+"\n"
+                        +"---------------------------------------");
+                m=1;
+                return 1;
+            } 
+            if(m==0)
+            {
+                System.out.println("\n"+"Libro NO encontrado: ");
+                return 0;
+            }
+        return 0;
+        
+    }
+    
+    public void buscar(String name, Statement estado) throws SQLException
+    {
+            
+            String nombre=name;
+           
+            ResultSet resultado=estado.executeQuery("SELECT * FROM `registro` WHERE `nombre` LIKE '"+nombre+"'");
+            int m=0;
+            while (resultado.next())
+            {
+                System.out.println("\n"+"Libro encontrado: ");
+                System.out.println("---------------------------------------"+"\n"+
+                        "Codigo: "+resultado.getString("codigo")+"\n"+
+                        "Nombre: "+resultado.getString("nombre")+"\n"+
+                        "Autor: "+resultado.getString("autor")+"\n"+
+                        "Area: "+resultado.getString("area")+"\n"+
+                        "Año: "+resultado.getInt("publicacion")+"\n"+
+                        "Cantidad: " +resultado.getInt("cantidad")+"\n"
+                        +"---------------------------------------");
+                m=1;
+                
+            } 
+            if(m==0)
+            {
+                System.out.println("\n"+"Libro NO encontrado: ");
+                
+            }
+    
+    }
+    
+    public void actualizar(Statement estado) throws SQLException
+    {
+        
+        int a=buscar(estado);
+        if (a==1)//Permite actualizacion
+        {
+        System.out.println("Ingrese la nueva Informacion:");
+        ingresar(estado);
+        System.out.println("Libro ACTUALIZADO con exito");
+        }
+    }
+    
+    public void eliminar(Statement estado) throws SQLException
+    {
+        System.out.println("Digite el nombre: ");        
+        String nombre=teclado.nextLine();
+        buscar(nombre,estado);
+        estado.executeUpdate("DELETE FROM `registro` WHERE `nombre` LIKE '"+nombre+"'");
+        System.out.println("Libro ELIMINADO con exito");
+    }
+          
+    public static void main(String[] args) throws SQLException {
+        
         BookSoft2 nuevo;
         nuevo=new BookSoft2();
         Scanner teclado=new Scanner(System.in);
         
+        Statement estado=nuevo.conectar();
+        
+               
         int opg=0;
         while(opg==0)
         {
@@ -84,16 +212,18 @@ public class BookSoft2 {
             switch(op2)
             {
                 case 1:
-                    //nuevo.ingresar();
+                    nuevo.ingresar(estado);
                     break;
                 case 2:
-                    //nuevo.actualizar();
+                    System.out.println("Actualización de información:");
+                    nuevo.actualizar(estado);
                     break;
                 case 3:
-                    //nuevo.eliminar();
+                    nuevo.eliminar(estado);
                     break;
                 case 4:
-                    //nuevo.buscar();
+                    System.out.println("Busqueda por Nombre:");
+                    nuevo.buscar(estado);
                     break;
                 case 5:
                     op=0;
@@ -141,13 +271,7 @@ public class BookSoft2 {
         
         }
     
-      } //Cierre try
-        catch (SQLException ex) {//error en la sintaxis de mysql
-            System.out.println("Error de mysql");
-        }
-         catch (Exception e) {//cualquier otro error
-            System.out.println("Se ha encontrado un error: "+ e.getMessage());
-        }
+     
         
     }  
 }
