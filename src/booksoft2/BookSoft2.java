@@ -11,97 +11,144 @@ import java.util.logging.Logger;
  */
 
 public class BookSoft2 {
+    
+    private Scanner teclado=new Scanner(System.in);
+    
+    public void menu1()
+    {
+        System.out.println("REGISTRO BIBLIOTECA MUNICIPAL");
+        System.out.println("---------------------------------");
+        System.out.println("(1) GESTION DE INFORMACION");
+        System.out.println("(2) GESTION DE PRESTAMOS");
+        System.out.println("(3) SALIR");
+                
+    }
+    
+    public void menu2()
+    {
+        System.out.println("GESTION DE INFORMACION");
+        System.out.println("---------------------------------");
+        System.out.println("(1) Ingresar Libro");
+        System.out.println("(2) Actualizar Libro");
+        System.out.println("(3) Eliminar Libro");
+        System.out.println("(4) Buscar Libro");
+        System.out.println("(5) Salir");
+                
+    }
 
+    public void menu3()
+    {
+        System.out.println("GESTION DE PRESTAMOS");
+        System.out.println("---------------------------------");
+        System.out.println("(1) Prestar Libro");
+        System.out.println("(2) Devolver Libro");
+        System.out.println("(3) Libros Prestados");
+        System.out.println("(4) Salir");
+                
+    }
+    
+    public void limpiar()
+    {
+        for ( int i=0;i<=2;i++) 
+        System.out.println(" "); 
+    }
+       
     public static void main(String[] args) {
         
-        String user= "sql289524";//internet
-        String pasword="sK8!qL6%";//internet
-        Scanner teclado=new Scanner(System.in);
-
-            
-        try {    
+    String user= "sql289524";//internet
+    String pasword="sK8!qL6%";//internet
+    
+    try {    
             System.out.println("Intentando conectar a la base de datos..");
             Class.forName("com.mysql.jdbc.Driver");       
             
-            
-            //Connection con=DriverManager.getConnection("jdbc:mysql://localhost/contactos",user,pasword);            
             Connection con=DriverManager.getConnection("jdbc:mysql://sql2.freemysqlhosting.net/sql289524",user,pasword);//para internet      
-            System.out.println("Conexion exitosa...");           
+            System.out.println("Conexion exitosa...");     
+    
+        BookSoft2 nuevo;
+        nuevo=new BookSoft2();
+        Scanner teclado=new Scanner(System.in);
+        
+        int opg=0;
+        while(opg==0)
+        {
+        nuevo.limpiar();
+        nuevo.menu1();
+        int op=teclado.nextInt();
+        while(op==1)
+        {
+            nuevo.limpiar();
+            nuevo.menu2();
+            int op2=teclado.nextInt();
             
-            
-            
-        //Cargar todos los contactos
-            Statement estado=con.createStatement(); 
-            System.out.println("Impresion de tabla:"+"\n");
-            ResultSet resultado=estado.executeQuery("SELECT * FROM  `registro`");//traemos la tabla 
-            
-            
-            while (resultado.next())
-            {//imprime todas las casillas de la tabla
-                System.out.println("Codigo: "+resultado.getString("codigo")+"\n"+
-                        "Nombre: "+resultado.getString("nombre")+"\n"+
-                        "Autor: "+resultado.getString("autor")+"\n"+
-                        "Area: "+resultado.getString("area")+"\n"+
-                        "Año: "+resultado.getInt("publicacion")+"\n"+
-                        "Cantidad: " +resultado.getInt("cantidad")+"\n");
+            switch(op2)
+            {
+                case 1:
+                    //nuevo.ingresar();
+                    break;
+                case 2:
+                    //nuevo.actualizar();
+                    break;
+                case 3:
+                    //nuevo.eliminar();
+                    break;
+                case 4:
+                    //nuevo.buscar();
+                    break;
+                case 5:
+                    op=0;
+                    break;
+                default:
+                    System.out.println("Opcion incorrecta");
+                    break;    
             }
             
+        }
+        
+    while(op==2)
+        {
+            nuevo.limpiar();
+            nuevo.menu3();
             
-        //buscar por nombre
-            System.out.println("\n");
+            int op3=teclado.nextInt();
             
-            System.out.println("Busqueda por Nombre:");
-            System.out.println("Digite el nombre a buscar: ");
-            String nombre=teclado.nextLine();  
-           
-            resultado=estado.executeQuery("SELECT * FROM `registro` WHERE `nombre` LIKE '"+nombre+"'");//se tiene qe concatenar la varibale +"nombre"+
-            
-            while (resultado.next())
-            {//imprime todas las casillas de la tabla
-                System.out.println("---------------------------------------"+"\n"+
-                        "Codigo: "+resultado.getString("codigo")+"\n"+
-                        "Nombre: "+resultado.getString("nombre")+"\n"+
-                        "Autor: "+resultado.getString("autor")+"\n"+
-                        "Area: "+resultado.getString("area")+"\n"+
-                        "Año: "+resultado.getInt("publicacion")+"\n"+
-                        "Cantidad: " +resultado.getInt("cantidad")+"\n"
-                        +"---------------------------------------");
+            switch(op3)
+            {
+                case 1:
+                    //nuevo.prestarlibro();
+                    break;
+                case 2:
+                    //nuevo.devolverlibro();
+                    break;
+                case 3:
+                    //nuevo.listarprestados();
+                    break;
+                case 4:
+                    op=0;
+                    break;
+                default:
+                    System.out.println("Opcion incorrecta");
+                    break;    
             }
             
-            //Ingresar contacto
-            System.out.println("Digite el Codigo: ");
-            String codigo=teclado.nextLine();
-            System.out.println("Digite el Nombre: ");
-            String nombre2=teclado.nextLine();
-            System.out.println("Digite el Autor: ");
-            String autor=teclado.nextLine();
-            System.out.println("Digite el Area: ");
-            String area=teclado.nextLine();
-            System.out.println("Digite el Añor: ");
-            int publicacion=teclado.nextInt();
-            System.out.println("Digite el Cantidad: ");
-            int cantidad=teclado.nextInt();
-            estado.executeUpdate("INSERT INTO `registro` VALUES (NULL, '"+codigo+"','"+nombre2+"','"+autor+"','"+area+"','"+publicacion+"','"+cantidad+"')");
-            
-            System.out.println("Cliente Agregado con exito");
-            
-            
-            //Borrar  contacto
-            System.out.println("Digite el nombre: ");
-            String nombre3=teclado.nextLine();
-            
-            estado.executeUpdate("DELETE FROM `registro` WHERE `nombre` LIKE '"+nombre3+"'");
-            
-            System.out.println("Cliente Eliminado con exito");
-                    
-            
-        } catch (SQLException ex) {//error en la sintaxis de mysql
+        }
+    
+        if(op==3)
+        {
+        opg=1;
+         }
+
+        
+        }
+    
+      } //Cierre try
+        catch (SQLException ex) {//error en la sintaxis de mysql
             System.out.println("Error de mysql");
         }
          catch (Exception e) {//cualquier otro error
             System.out.println("Se ha encontrado un error: "+ e.getMessage());
         }
-      
-    }
-    
+        
+    }  
 }
+    
