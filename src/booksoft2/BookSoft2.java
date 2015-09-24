@@ -196,6 +196,33 @@ public class BookSoft2 {
         return 0;
     }
     
+    public int buscarpres(String name, Statement estado) throws SQLException
+    {
+            
+            String libro=name;
+           
+            ResultSet resultado=estado.executeQuery("SELECT * FROM `prestamos` WHERE `libro` LIKE '"+libro+"'");
+            int m=0;
+            while (resultado.next())
+            {
+                System.out.println("\n"+"Libro encontrado: ");
+                System.out.println("---------------------------------------"+"\n"+
+                        "Cedula: "+resultado.getString("cedula")+"\n"+
+                        "Libro: "+resultado.getString("libro")+"\n"+
+                        "---------------------------------------");
+                m=1;
+                return 1;
+                
+            } 
+            if(m==0)
+            {
+                System.out.println("\n"+"Libro NO encontrado: ");
+                return 0;
+                
+            }
+        return 0;
+    }
+    
     public void actualizar(Statement estado) throws SQLException
     {
         
@@ -259,6 +286,48 @@ public class BookSoft2 {
         }
         
     }
+    
+    public void devolverlibro(Statement estado) throws SQLException
+    {
+       System.out.println("Digite el nombre libro: ");        
+        String libro=teclado.next();
+        int a=buscarpres(libro,estado);
+        if(a==1)
+        {            
+            ResultSet resultado=estado.executeQuery("SELECT * FROM `registro` WHERE `nombre` LIKE '"+libro+"'");
+            int cantidad = 0;
+            while (resultado.next())
+            {
+                cantidad=resultado.getInt("cantidad");
+            }
+            
+            System.out.println("Digite la cedula: ");        
+            String cedula=teclado.next();
+            
+            estado.executeUpdate("DELETE FROM `prestamos` WHERE `cedula` LIKE '"+cedula+"'");
+
+            estado.executeUpdate("UPDATE  `registro` SET  `cantidad` =  '"+(cantidad+1)+"' WHERE  `registro`.`nombre` ='"+libro+"'");  
+                  
+            System.out.println("Libro DEVUELTO con exito");
+
+    
+        }
+         
+    }
+    
+    public void listarprestamos(Statement estado) throws SQLException
+    {
+        ResultSet resultado=estado.executeQuery("SELECT * FROM `prestamos`");
+        System.out.println("\n"+"\n"+"REGISTRO DE PRESTAMOS");
+        System.out.println("---------------------------------------");
+        while (resultado.next())
+        {
+            System.out.println(
+                    "Cedula: "+resultado.getString("cedula")+"\t"+
+                    "Libro: "+resultado.getString("libro"));              
+            }     
+        System.out.println("---------------------------------------");
+    }
           
     public static void main(String[] args) throws SQLException {
         
@@ -318,10 +387,10 @@ public class BookSoft2 {
                     nuevo.prestarlibro(estado);
                     break;
                 case 2:
-                    //nuevo.devolverlibro();
+                    nuevo.devolverlibro(estado);
                     break;
                 case 3:
-                    //nuevo.listarprestados();
+                    nuevo.listarprestamos(estado);
                     break;
                 case 4:
                     op=0;
