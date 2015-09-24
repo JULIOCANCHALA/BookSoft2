@@ -95,8 +95,35 @@ public class BookSoft2 {
         String autor=teclado.next();
         
         System.out.println("Digite el Area: ");
-        String area=teclado.next();
+        System.out.println("(1)Quimica (2)Fisica (3)Tengologia (4)Calculo (5)Programacion");        
+        String area;    
+               
+        int op=teclado.nextInt();
         
+        switch(op)
+        {
+            case 1:
+                area="Quimica";
+                break;
+            case 2:
+                area="Fisica";
+                break;
+            case 3:
+                area="Tegnologia";
+                break;
+            case 4:
+                area="Calculo";
+                break;
+            case 5:
+                area="Programacion";
+                break;
+            default:
+                System.out.println("No ingresaste una Area valida");
+                System.out.println("Este libro requiere Actualizar");
+                area="Null";
+                break;
+        }
+                
         System.out.println("Digite el Año: ");
         int publicacion=teclado.nextInt();
         
@@ -199,6 +226,39 @@ public class BookSoft2 {
         System.out.println("Libro ELIMINADO con exito");
         }
     }
+    
+    public void prestarlibro(Statement estado) throws SQLException
+    {
+        System.out.println("Digite el nombre libro: ");        
+        String libro=teclado.next();
+        int a=buscar(libro,estado);
+        if(a==1)
+        {            
+            ResultSet resultado=estado.executeQuery("SELECT * FROM `registro` WHERE `nombre` LIKE '"+libro+"'");
+            int cantidad = 0;
+            while (resultado.next())
+            {
+                cantidad=resultado.getInt("cantidad");
+            }
+            
+            if (cantidad>0)
+                {
+                    System.out.println("Digite la cedula: ");        
+                    String cedula=teclado.next();
+                    
+                    estado.executeUpdate("INSERT INTO `prestamos` VALUES (NULL, '"+cedula+"','"+libro+"')");
+                    estado.executeUpdate("UPDATE  `registro` SET  `cantidad` =  '"+(cantidad-1)+"' WHERE  `registro`.`nombre` ='"+libro+"'");  
+                    
+                    System.out.println("Libro PRESTADO con exito");
+                }
+                else
+                {
+                    System.out.println("No hay existencias en el momento");
+                }
+    
+        }
+        
+    }
           
     public static void main(String[] args) throws SQLException {
         
@@ -255,7 +315,7 @@ public class BookSoft2 {
             switch(op3)
             {
                 case 1:
-                    //nuevo.prestarlibro();
+                    nuevo.prestarlibro(estado);
                     break;
                 case 2:
                     //nuevo.devolverlibro();
