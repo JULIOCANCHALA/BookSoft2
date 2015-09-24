@@ -406,12 +406,8 @@ public class BookSoft2 {
         {
         opg=1;
          }
-
-        
+   
         }
-    
-     
-        
+  
     }  
 }
-    
