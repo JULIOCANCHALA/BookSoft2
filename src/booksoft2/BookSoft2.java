@@ -11,8 +11,8 @@ import java.util.Scanner;
 public class BookSoft2 {
     
     private Scanner teclado=new Scanner(System.in);
-    private final String user= "sql289524";//internet
-    private final String pasword="sK8!qL6%";//internet
+    private final String user= "sql291728";//internet
+    private final String pasword="sH3%jT2!";//internet
     
  
     public void menu1()
@@ -61,7 +61,7 @@ public class BookSoft2 {
             System.out.println("Intentando conectar a la base de datos..");
             Class.forName("com.mysql.jdbc.Driver");       
             
-            Connection con=DriverManager.getConnection("jdbc:mysql://sql2.freemysqlhosting.net/sql289524",user,pasword);//para internet      
+            Connection con=DriverManager.getConnection("jdbc:mysql://sql2.freemysqlhosting.net/sql291728",user,pasword);//para internet      
             System.out.println("Conexion exitosa...");     
             
             Statement estado=con.createStatement(); 
